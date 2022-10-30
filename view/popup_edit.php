@@ -25,7 +25,7 @@
                     <div class="row mb-3">
                         <div class="col-sm">
                             <input type="datetime-local" class="form-control py-1" id="eventEditDateTime" placeholder="eventTime" name="eventDateTime" required>
-                            <input type="hidden" class="form-control py-1" id="eventId" placeholder="eventId" name="eventId">
+                            <input id="eventId" type="hidden" class="form-control py-1" id="eventId" placeholder="eventId" name="eventId">
                         </div>
                     </div>
                     <select class="form-select mb-4" id="floatingSelect" name="eventType">
@@ -38,6 +38,11 @@
                         <button type="button" class="buttonBlack" data-bs-dismiss="modal">Cancel</button>
                         <button id="deleteButton" type="button" class="buttonDelete">Delete</button>
                         <button type="submit" class="buttonPink">Save</button>
+                        <div id="beSureBlock" class="beSureBlock d-inline-flex justify-content-end align-items-center d-none">
+                            <div class="bSure">Are you sure?</div>
+                            <button id="deleteButtonNoSure" type="button" class="buttonBlack">No</button>
+                            <a id="deleteButtonForSure" class="buttonDeleteSure">Yes</a>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -82,12 +82,12 @@
 <!--Slider with event-->
 <?php include 'view/event_slider.php' ?>
 
-<!--Modal for adding new event-->
+<!--Modal with events -->
 <?php include 'view/popup_add.php' ?>
 <?php include 'view/popup_edit.php' ?>
 <?php include 'view/popup_delete.php' ?>
 
 <script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/show_events.js"></script>
+<script src="js/scripts.js"></script>
 </body>
 </html>

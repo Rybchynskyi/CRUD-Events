@@ -26,8 +26,8 @@ $sql_edit_event = "UPDATE `events` SET
 
 $count = $pdo->query($sql_edit_event);
 if ($count==true) {
-    header('Location: ../index.php?info=addSuccess');
+    header('Location: ../index.php?info=editSuccess');
 }
 else {
-    header('Location: ../index.php?info=addWrong');
+    header('Location: ../index.php?info=editWrong');
 }

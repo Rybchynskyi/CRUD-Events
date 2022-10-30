@@ -1,4 +1,4 @@
-fetch('https://systemator.pro/events_json.php')
+fetch('modules/events_json.php')
     .then((response) => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -6,20 +6,19 @@ fetch('https://systemator.pro/events_json.php')
         return response.json();
     })
     .then((data) => {
+        // make eventList for working with them
         let eventList = data;
+
         const dateContainers = document.getElementsByClassName('dotsContainer');
         const dateCells = document.getElementsByTagName('td');
 
         function renderDots() {
-
-            // let cells = document.getElementsByTagName('td');
             for (let i=0; i<eventList.length; i++) {
                 let particularTd = document.querySelector('[data-date="'+ eventList[i].date +'"]')
                 let redDot = '<div class="dot redDot"></div>';
                 let greenDot = '<div class="dot greenDot"></div>';
                 let yellowDot = '<div class="dot yellowDot"></div>';
                 let blueDot = '<div class="dot blueDot"></div>';
-
 
                 function isRenderedDot (dotClass) {
                     let dots = particularTd.children[0].children;
@@ -71,7 +70,6 @@ fetch('https://systemator.pro/events_json.php')
                 }
 
                 // defind button and set colour
-                console.log(e.target.classList[1]);
                 let colour;
                 switch (e.target.classList[1]) {
                     case ("red"):
@@ -98,10 +96,8 @@ fetch('https://systemator.pro/events_json.php')
             });
         }
 
-        // show all events dy pressing button
+        // show all events by pressing button
         filterButtons[0].addEventListener("click", e => {
-            // make array emty
-            eventList = [];
 
             // make dotsContainer empty
             for (let i = 0; i < dateContainers.length; i++) {
@@ -116,6 +112,7 @@ fetch('https://systemator.pro/events_json.php')
         // render slider and popup for editing event
         for (let i=0; i<dateCells.length; i++) {
             dateCells[i].addEventListener('click', e => {
+
                 // delete previous list in slider
                 let elements = document.getElementById('sliderScroll');
                 while (elements.firstChild) {
@@ -127,6 +124,7 @@ fetch('https://systemator.pro/events_json.php')
                 const monthNames = ["January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"];
 
+                // render date for add popup
                 let dateArr = clickedDate.split("-");
                 document.getElementById('popupDate').innerText = dateArr[1] + " " + monthNames[dateArr[0]] + " at";
                 document.getElementById('eventDate').value = dateArr[0] + "-" + dateArr[1];
@@ -157,7 +155,7 @@ fetch('https://systemator.pro/events_json.php')
                         // get date with month
                         let normalDate = eventDate.getDay() + " " + monthNames[eventDate.getMonth()];
 
-                        // // get event tag
+                        // get event tag
                         if (eventList[i].category == 1) {
                             eventTag =
                                 '<div id="eventTag" class="eventTag red" data-category="'+ eventList[i].category +'">\n' +
@@ -183,7 +181,7 @@ fetch('https://systemator.pro/events_json.php')
                                 '</div>\n'
                         }
 
-                        // get block for paste to html
+                        // render block with event for paste to html
                         let newEvent = '<div class="d-flex justify-content-between event">\n' +
                             '                <div id="eventName" class="eventName">\n' +
                                                 eventList[i].name +
@@ -219,7 +217,6 @@ fetch('https://systemator.pro/events_json.php')
                                 }
 
                                 let inputs = document.getElementById('editModal').getElementsByTagName('input');
-                                console.log(inputs);
                                 let textarea = document.getElementById('editModal').getElementsByTagName('textarea');
                                 inputs[0].value = clickedEvent.name;
                                 textarea[0].value = clickedEvent.descr;
@@ -227,7 +224,13 @@ fetch('https://systemator.pro/events_json.php')
                                 inputs[2].value = clickedEvent.datetime;
                                 inputs[3].value = clickedEvent.id;
 
-                                // get and render category in popup
+                                // remove beSure block if it exist
+                                let bSureClasslist = document.getElementById('beSureBlock').classList;
+                                if (!bSureClasslist.contains('d-none')) {
+                                    bSureClasslist.add('d-none');
+                                }
+
+                                // get and render category in edit popup
                                 let categoryArr = document.getElementById('editModal').getElementsByTagName('option');
 
                                 switch(clickedEvent.category) {
@@ -262,18 +265,59 @@ function closeList(){
 
 // make sure about deleting
 document.getElementById('deleteButton').addEventListener("click", e=>{
-    document.getElementById('deleteFooter').innerHTML =
-        '<h6>Are you sure?</h6>\n' +
-        '<button id="deleteButtonNoSure" type="button" class="buttonBlack">No</button>\n' +
-        '<a id="deleteButtonForSure" href="../modules/delete_event.php" class="buttonDeleteSure">Yes</a>';
+    //show besure block
+    document.getElementById('beSureBlock').classList.remove('d-none');
+    //add link for delete
+    let elementId = document.getElementById('eventId').value;
+    document.getElementById('deleteButtonForSure').href = "modules/delete_event.php?id="+elementId;
 })
 
 document.getElementById('deleteButtonNoSure').addEventListener("click", l=>{
-    document.getElementById('deleteFooter').innerHTML =
-        '<button type="button" class="buttonBlack" data-bs-dismiss="modal">Cancel</button>\n' +
-        '<button id="deleteButton" type="button" class="buttonDelete">Delete</button>' +
-        '<button type="submit" class="buttonPink">Save</button>';
+    document.getElementById('beSureBlock').classList.add('d-none');
 })
+
+// add informers
+let info = window.location.search.substr(1);
+let informer = "<div id=\"informer\" class=\"informer\"></div>"
+
+switch (info) {
+    case 'info=deleteSuccess':
+        document.body.insertAdjacentHTML("afterbegin", informer);
+        document.getElementById("informer").style.background = "#00CC66";
+        document.getElementById("informer").innerText = "Deleting was successfully";
+    break;
+
+    case 'info=deleteWrong':
+        document.body.insertAdjacentHTML("afterbegin", informer);
+        document.getElementById("informer").style.background = "#FF4E6B";
+        document.getElementById("informer").innerText = "Something goes wrong";
+    break;
+
+    case 'info=addSuccess':
+        document.body.insertAdjacentHTML("afterbegin", informer);
+        document.getElementById("informer").style.background = "#00CC66";
+        document.getElementById("informer").innerText = "Creating was successfully";
+    break;
+
+    case 'info=addWrong':
+        document.body.insertAdjacentHTML("afterbegin", informer);
+        document.getElementById("informer").style.background = "#FF4E6B";
+        document.getElementById("informer").innerText = "Something goes wrong";
+    break;
+
+    case 'info=editSuccess':
+        document.body.insertAdjacentHTML("afterbegin", informer);
+        document.getElementById("informer").style.background = "#00CC66";
+        document.getElementById("informer").innerText = "Editing was successfully";
+        break;
+
+    case 'info=editWrong':
+        document.body.insertAdjacentHTML("afterbegin", informer);
+        document.getElementById("informer").style.background = "#FF4E6B";
+        document.getElementById("informer").innerText = "Something goes wrong";
+        break;
+}
+
 
 
 
