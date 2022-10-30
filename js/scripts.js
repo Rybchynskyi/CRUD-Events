@@ -25,7 +25,7 @@ fetch('modules/events_json.php')
                     let renderedDots = 0;
                     if (dots.length >= 0) {
                         for (let i=0; i<dots.length; i++) {
-                            if (dots[i].classList[1] == dotClass) {
+                            if (dots[i].classList[1] === dotClass) {
                                 renderedDots++;
                             }
                         }
@@ -33,22 +33,22 @@ fetch('modules/events_json.php')
                     return renderedDots;
                 }
 
-                if (eventList[i].category == 1) {
+                if (eventList[i].category === "1") {
                     if (isRenderedDot('redDot') === 0) {
                         particularTd.lastChild.insertAdjacentHTML("afterbegin", redDot);
                     }
                 }
-                else if (eventList[i].category == 2) {
+                else if (eventList[i].category === "2") {
                     if (isRenderedDot('greenDot') === 0) {
                         particularTd.lastChild.insertAdjacentHTML("afterbegin", greenDot);
                     }
                 }
-                else if (eventList[i].category == 3) {
+                else if (eventList[i].category === "3") {
                     if (isRenderedDot('yellowDot') === 0) {
                         particularTd.lastChild.insertAdjacentHTML("afterbegin", yellowDot);
                     }
                 }
-                else if (eventList[i].category == 4) {
+                else if (eventList[i].category === "4") {
                     if (isRenderedDot('blueDot') === 0) {
                         particularTd.lastChild.insertAdjacentHTML("afterbegin", blueDot);
                     }
@@ -69,26 +69,35 @@ fetch('modules/events_json.php')
                     dateContainers[i].innerHTML = "";
                 }
 
-                // defind button and set colour
+                // reset previous borders
+                for (let c=0; c<filterButtons.length; c++) {
+                    filterButtons[c].style.border = "1px solid transparent";
+                }
+
+                // defind button, set colour and make border
                 let colour;
                 switch (e.target.classList[1]) {
                     case ("red"):
-                        colour = 1;
+                        colour = "1";
+                        e.target.style.border = "1px solid #FF4E6B";
                         break;
                     case ("green"):
-                        colour = 2;
+                        colour = "2";
+                        e.target.style.border = "1px solid #00CC66";
                         break;
                     case ("yellow"):
-                        colour = 3;
+                        colour = "3";
+                        e.target.style.border = "1px solid #FFBB33";
                         break;
                     case ("blue"):
-                        colour = 4;
+                        colour = "4";
+                        e.target.style.border = "1px solid #4DB4FF";
                         break;
                 }
 
                 // fill dotsContainer by particular dots
                 for (let i = 0; i < data.length; i++) {
-                    if (data[i].category == colour) {
+                    if (data[i].category === colour) {
                         eventList.push(data[i])
                     }
                 }
@@ -97,7 +106,12 @@ fetch('modules/events_json.php')
         }
 
         // show all events by pressing button
-        filterButtons[0].addEventListener("click", e => {
+        filterButtons[0].addEventListener("click", () => {
+
+            // reset previous borders
+            for (let c=0; c<filterButtons.length; c++) {
+                filterButtons[c].style.border = "1px solid transparent";
+            }
 
             // make dotsContainer empty
             for (let i = 0; i < dateContainers.length; i++) {
@@ -134,7 +148,7 @@ fetch('modules/events_json.php')
                 document.getElementById("slider").style.height = "753px";
 
                 for (let i=0; i<data.length; i++) {
-                    if(eventList[i].date == clickedDate) {
+                    if(eventList[i].date === clickedDate) {
 
                         // add 0 in dateformats
                         function addLeadZero(val) {
@@ -155,26 +169,32 @@ fetch('modules/events_json.php')
                         // get date with month
                         let normalDate = eventDate.getDay() + " " + monthNames[eventDate.getMonth()];
 
-                        // get event tag
-                        if (eventList[i].category == 1) {
+                        // get event tag and date colour
+                        let eventColourSlider;
+
+                        if (eventList[i].category === "1") {
+                            eventColourSlider = "eventDateRed";
                             eventTag =
                                 '<div id="eventTag" class="eventTag red" data-category="'+ eventList[i].category +'">\n' +
                                 'Meeting with an expert\n' +
                                 '</div>\n'
                                  }
-                        else if (eventList[i].category == 2) {
+                        else if (eventList[i].category === "2") {
+                            eventColourSlider = "eventDateGreen";
                             eventTag =
                                 '<div id="eventTag" class="eventTag green" data-category="'+ eventList[i].category +'">\n' +
                                 'Question-answer\n' +
                                 '</div>\n'
                         }
-                        else if (eventList[i].category == 3) {
+                        else if (eventList[i].category === "3") {
+                            eventColourSlider = "eventDateYellow";
                             eventTag =
                                 '<div id="eventTag" class="eventTag yellow" data-category="'+ eventList[i].category +'">\n' +
                                 'Conference\n' +
                                 '</div>\n'
                         }
-                        else if (eventList[i].category == 4) {
+                        else if (eventList[i].category === "4") {
+                            eventColourSlider = "eventDateBlue";
                             eventTag =
                                 '<div id="eventTag" class="eventTag blue" data-category="'+ eventList[i].category +'">\n' +
                                 'Webinar\n' +
@@ -195,7 +215,7 @@ fetch('modules/events_json.php')
                                             eventList[i].place +
                             '            </div>\n' +
                             '            <div class="d-flex justify-content-between  my-2">\n' +
-                            '                <div id="eventTime" class="eventTime" data-datetime = "' + dateTime + '">\n' +
+                            '                <div class="eventTimeSlider '+ eventColourSlider +'" data-datetime = "' + dateTime + '">\n' +
                                                 normalDate + ", " + normalHour + ":" + normalMin +
                             '                </div>\n' +
                                                 eventTag +
@@ -211,7 +231,7 @@ fetch('modules/events_json.php')
                             editButton[i].addEventListener("click", e => {
                                 let clickedEvent;
                                 for (let i=0; i<eventList.length; i++) {
-                                    if (eventList[i].id == e.target.dataset.event_id) {
+                                    if (eventList[i].id === e.target.dataset.event_id) {
                                         clickedEvent = eventList[i];
                                     }
                                 }
@@ -264,7 +284,7 @@ function closeList(){
 }
 
 // make sure about deleting
-document.getElementById('deleteButton').addEventListener("click", e=>{
+document.getElementById('deleteButton').addEventListener("click", ()=>{
     //show besure block
     document.getElementById('beSureBlock').classList.remove('d-none');
     //add link for delete
@@ -272,7 +292,7 @@ document.getElementById('deleteButton').addEventListener("click", e=>{
     document.getElementById('deleteButtonForSure').href = "modules/delete_event.php?id="+elementId;
 })
 
-document.getElementById('deleteButtonNoSure').addEventListener("click", l=>{
+document.getElementById('deleteButtonNoSure').addEventListener("click", ()=>{
     document.getElementById('beSureBlock').classList.add('d-none');
 })
 

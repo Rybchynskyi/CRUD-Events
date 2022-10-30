@@ -24,8 +24,8 @@ hr {
 }
 
 .navbar {
-    margin: 24px 0px;
-    padding-bottom: 0px;
+    margin: 24px 0;
+    padding-bottom: 0;
     background: #1E1E1E;
     border-bottom: 2px solid rgba(255, 78, 107, 0.16);
 }
@@ -41,7 +41,7 @@ hr {
 
 @media screen and (max-width: 991px) {
     .navbar {
-        margin: 0px 0px 24px 0px;
+        margin: 0 0 24px 0;
 
     }
 
@@ -51,7 +51,7 @@ hr {
         font-size: 24px;
         line-height: 24px;
         color: #FF4E6B;
-        adding-bottom: 14px;
+        padding-bottom: 14px;
         padding-top: 25px;
     }
 }
@@ -80,7 +80,7 @@ hr {
 button.events {
     border-radius: 16px;
     padding: 4px 16px;
-    border: none;
+    border: 1px solid transparent;
     outline: none;
     font-weight: 400;
     font-size: 16px;
@@ -116,7 +116,7 @@ button.events.transparent {
 
 .calendar {
     text-align: center;
-    margin: 0px auto;
+    margin: 0 auto;
 
 }
 
@@ -172,7 +172,7 @@ button.events.transparent {
 }
 
 .footerContent span {
-    padding: 0px 10px 0px 10px;
+    padding: 0 10px 0 10px;
     font-weight: 200;
     font-size: 16px;
     line-height: 16px;
@@ -197,16 +197,16 @@ button.events.transparent {
     left: 80px;
     bottom: -50px;
     width: 360px;
-    height: 0px;
+    height: 0;
     background: #131315;
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     padding: 24px 18px 24px 24px;
     transition-duration: 0.5s;
 }
 
 @media screen and (max-width: 530px) {
     .slider {
-        left: 0px;
+        left: 0;
     }
 }
 
@@ -272,6 +272,7 @@ button.events.transparent {
     font-weight: 400;
     font-size: 14px;
     line-height: 14px;
+    height: 100%;
 }
 
 .eventTag.red {
@@ -355,11 +356,11 @@ button.events.transparent {
 
 .modal-header {
     border: none;
-    padding: 0px;
+    padding: 0;
 }
 
 .modal-body {
-    padding: 0px;
+    padding: 0;
 }
 
 .modal-content h5 {
@@ -442,6 +443,28 @@ button.events.transparent {
     filter: invert(1);
 }
 
+.eventTimeSlider {
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.eventDateRed {
+    color: #FF4E6B;
+}
+
+.eventDateGreen {
+    color: #00CC66;
+}
+
+.eventDateYellow {
+    color: #FFBB33;
+}
+
+.eventDateBlue {
+    color: #4DB4FF;
+}
+
 .dotsContainer {
     height: 6px;
 }
@@ -450,8 +473,8 @@ button.events.transparent {
     width: 6px;
     height: 6px;
     border-radius: 5px;
-    margin: 0px 2px;
-    padding: 0px;
+    margin: 0 1px;
+    padding: 0;
 }
 
 .redDot {
@@ -486,7 +509,7 @@ button.events.transparent {
 .informer {
     width: 350px;
     position: absolute;
-    right: 0px;
+    right: 0;
     color: black;
     padding: 12px;
     border-top-left-radius: 6px;
